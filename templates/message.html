@@ -1,0 +1,38 @@
+$def with (message)
+<div class="row">
+    <div class="col-lg-12">
+        <p><br><br></p>
+        $if message=="loginerr":
+	    <p>登录失败，请检查用户、密码，<a href="/login">重新登录</a></p>
+	$elif message=="checkerr":
+	   <p>查询不到结果，您可以点击<a href="/report">帮帮我</a></p>
+	$elif message=="registererr":
+	   <p>注册失败</p>
+   	$elif message=="registererr-passwd":
+           <p>注册失败，两次密码输入不一致，<a href="/register">重新注册</a></p>
+	$elif message=="registererr-verify":
+           <p>注册失败，校验码输入错误，<a href="/register">重新注册</a></p>
+	$elif message=="registererr-username":
+           <p>注册失败，用户名已经注册过，<a href="/register">重新注册</a></p>
+	$elif message=="registerok":
+           <p>注册成功，点击<a href="/login">登录</a></p>
+	$elif message=="reporterr":
+           <p>录入失败</p>
+	$elif message=="reporterr-url":
+           <p>录入失败，网站无法打开，<a href="/report">重新录入</a></p>
+	$elif message=="reporterr-verify":
+           <p>录入失败，验证码输入错误，<a href="/report">重新录入</a></p>
+	$elif message=="reportloginok":
+           <p>录入成功，如果网站已经确认会邮件通知你</p>
+	$elif message=="reportnotloginok":
+           <p>录入成功，你可以隔一天时间再来查询结果，隔的时间越长越准确</p>
+	$elif message=="findpasswd":
+           <p>密码已经找回，已发送到你注册的邮箱中</p>	
+	$elif message=="findpasswderr":
+           <p>找回密码失败，<a href="/forgetpasswd">重新找回密码</a></p>
+	$elif message=="notverifier":
+           <p>已经发送邮件到你注册的邮箱，验证你的邮箱后，才可以进行投票</p>
+	$elif message=="isverifier":
+           <p>感谢您的验证，您现在可以帮助他人了</p>
+    </div>
+</div>

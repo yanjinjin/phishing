@@ -1,0 +1,166 @@
+$def with (user , result, verify,count)
+$ verify_type_unknown=0
+$ verify_type_phishing=1
+$ verify_type_not_phishing=2
+$ verify_type_report=3
+$ verify_type_host=4
+<div class="row">        
+    <div class="col-lg-12">        
+    	<p><br></p>
+    	<p>工作任务</p>
+		<table class="table table-bordered table-hover table-condensed"><tbody><tr><td>
+        <form id="myform" method="post" action="admin">
+            <button type="submit" class="btn btn-default" value="white" name="btn">白名单收集</button>&nbsp
+            <button type="submit" class="btn btn-default" value="black" name="btn">黑名单收集</button>&nbsp
+            <button type="submit" class="btn btn-default" value="sendemail" name="btn">邮件通知校验者</button>&nbsp
+            <button type="submit" class="btn btn-default" value="similarity" name="btn">相似度分析</button>                 
+        </form>
+		</td></tr></tbody></table>
+	</div>
+</div>
+<div class="row">        
+    <div class="col-lg-12">  
+        <p>统计</p>
+		<table class="table table-bordered table-hover table-condensed"><tbody><tr><td>
+		会员：$count[0] &nbsp 正常网站：$count[1] &nbsp 钓鱼网站：$count[2] &nbsp 举报网站：$count[3] &nbsp 可信域名：$count[4]
+		</td></tr></tbody></table>
+	</div>
+</div>
+<div class="row">        
+    <div class="col-lg-12"> 
+			<p>系统用户</p>
+			<table class="table table-bordered table-hover table-condensed">
+				<thead>
+					<tr>
+						<th>
+							编号
+						</th>
+						<th>
+							用户名
+						</th>
+						<th>
+							日期
+						</th>
+					</tr>
+				</thead>
+				<tbody>						    
+					$for i in user
+						<tr>
+							<td>
+								$i[0]
+							</td>
+							<td>
+								$i[1]									
+							</td>
+							<td>
+								$i[2][:19]
+							</td>
+						</tr>
+				   
+				</tbody>
+			</table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+        <p>feeds</p>
+        <table class="table table-bordered table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>
+                        编号
+                    </th>
+                    <th>
+                        网站
+                    </th>
+                    <th>
+                        类型
+                    </th>
+                </tr>
+            </thead>
+            <tbody>						    
+                $for i in result
+                    <tr>
+                        <td>
+                            $i[0]
+                        </td>
+                        <td>
+			    <p><a href="$i[1]">
+                               $if len(i[1]) > 24:
+                                   $i[1][:24]
+                               $else:
+                                   $i[1]       
+                            </a></p>
+                        <p>
+			    $i[3][:19]
+                        </p>
+                        <td>
+                            $if i[2] == verify_type_phishing:
+                                钓鱼网站
+                            $elif i[2] == verify_type_not_phishing:
+                                正常网站    
+			    $elif i[2] == verify_type_report:
+				举报网站
+			    $elif i[2] == verify_type_host:
+                                可信域名 
+			    $else:
+				未知网站
+                        </td>
+                    </tr>
+               
+            </tbody>
+        </table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+	<p>投票</p>
+        <table class="table table-bordered table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>
+                        编号
+                    </th>
+                    <th>
+                        网站
+                    </th>
+		    <th>
+                        类型
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                $for i in verify
+                    <tr>
+                        <td>
+                            $i[0]
+                        </td>
+                        <td>
+                            <p><a href="$i[1]">
+                               $if len(i[1]) > 24:
+                                   $i[1][:24]
+                               $else:
+                                   $i[1]       
+                            </a></p>
+                        <p>
+                            $i[2]
+                        </p>
+						<p>
+                            $i[4][:19]
+                        </p>
+						<td>
+                            $if i[3] == verify_type_phishing:
+                                钓鱼网站
+                            $elif i[3] == verify_type_not_phishing:
+                                正常网站
+                            $elif i[3] == verify_type_report:
+                                举报网站
+                            $else:
+                                未知网站
+						</td>
+                    </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>

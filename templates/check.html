@@ -1,0 +1,26 @@
+$def with (score_not_phishing , score_phishing , score_unknown)
+<div class="row">
+    <div class="col-lg-12">    
+        <p class="text-left">以下结果仅供参考</p>
+	<p class="text-left">正常网站：</p>
+        <div class="progress">
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="$score_not_phishing" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: $score_not_phishing%">
+            $score_not_phishing%
+            </div>
+        </div>
+        <p class="text-left">钓鱼网站：</p>
+        <div class="progress">
+            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="$score_phishing" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: $score_phishing%">
+            $score_phishing%
+            </div>
+        </div>
+	<p class="text-left">未知网站(暂时无法确认的网站)：</p>
+        <div class="progress">
+            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="$score_unknown" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: $score_unknown%">
+            $score_unknown%
+            </div>
+        </div>
+    </div>
+</div>
+
+
