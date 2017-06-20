@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-
+import os
 from PIL import Image,ImageFont,ImageDraw,ImageFilter
 import random
 import StringIO
@@ -11,7 +11,7 @@ class Verifycode():
 		self.height = 60
 		self.image = Image.new('RGB', (self.width,self.height), (255,255,255));
 		#创建font对象
-		self.font = ImageFont.truetype('static/fonts/Arial.ttf',36);
+		self.font = ImageFont.truetype(os.path.join(os.path.dirname(__file__),'static/fonts/Arial.ttf'),36);
 		
 		#创建draw对象
 		self.draw = ImageDraw.Draw(self.image)
@@ -46,6 +46,6 @@ class Verifycode():
 		print self.code
 		#模糊
 		#self.image = self.image.filter(ImageFilter.BLUR)
-		self.image.save('static/img/verifycode.jpg','jpeg')
+		self.image.save(os.path.join(os.path.dirname(__file__),'static/img/verifycode.jpg'),'jpeg')
 		return self.code 
 

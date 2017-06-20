@@ -1,12 +1,13 @@
 #coding=utf-8
-import os,web,time,datetime
+import time,datetime
 import sqlite3 as db
 import math
 import hashlib
+import os
 
 class Model:
     def __init__(self):
-	self.db = "phishing.db"
+	self.db = os.path.join(os.path.dirname(__file__),"phishing.db")
 	self.table_user="user"
 	self.table_sendemail="sendemail"
 	self.table_result = "result"

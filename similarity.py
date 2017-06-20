@@ -1,8 +1,9 @@
 #coding=utf-8
 import math
 from ctypes import *
+import os
 
-LEVENSHTEIN_SO = cdll.LoadLibrary("./Levenshtein/Levenshtein.so")
+LEVENSHTEIN_SO = cdll.LoadLibrary(os.path.join(os.path.dirname(__file__),"Levenshtein/Levenshtein.so"))
 
 class Similarity:
     def __init__(self):

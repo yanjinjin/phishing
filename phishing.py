@@ -1,4 +1,8 @@
 #coding=utf-8
+import os
+curdir = os.path.dirname(__file__)
+import sys
+sys.path.append(curdir) 
 import os,web
 import math
 import thread
@@ -31,9 +35,9 @@ t_globals = {
     'datestr': web.datestr,  
     'cookie': web.cookies,  
 }
-render = web.template.render('templates', base='base', globals=t_globals)
+render = web.template.render(os.path.join(curdir,'templates'), base='base', globals=t_globals)
 app = web.application(urls, locals())
-sess = web.session.Session(app, web.session.DiskStore('sessions'), initializer = {'username': None,'verifycode':None})
+sess = web.session.Session(app, web.session.DiskStore(os.path.join(curdir,'sessions')), initializer = {'username': None,'verifycode':None})
 
 verify_type_unknown=0
 verify_type_phishing=1
@@ -318,6 +322,9 @@ class admin:
         else:
 	    raise web.seeother("/admin")	
 	raise web.seeother("/admin")
-	
-if __name__ == "__main__":
+
+if not __name__ == "__main__":    
+    application = app.wsgifunc()
+else:
     app.run()
+	
