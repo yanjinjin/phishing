@@ -2,7 +2,8 @@ from spider import *
 
 class PhishtankBlackSpider(Spider):
     def parse_html(self):
-        file = "./download/%s"%(self.url[self.url.rindex('/')+1:])
+        file = "download/%s"%(self.url[self.url.rindex('/')+1:])
+        file = os.path.join(os.path.dirname(__file__),file)
         print file
 	if self.get_rescode == 200 and self.get_html!=None:
             file_object = open(file , 'w+')

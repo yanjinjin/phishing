@@ -10,7 +10,8 @@ class AlexaGlobalSpider(Spider):
             return False
 
     def get_data(self):
-	file = "./download/%s"%(self.url[self.url.rindex('/')+1:])
+	file = "download/%s"%(self.url[self.url.rindex('/')+1:])
+	file = os.path.join(os.path.dirname(__file__),file)
         print file
         html = None
         if self.get_rescode == 200 and self.get_html!=None:
@@ -94,11 +95,11 @@ class WhiteSpider:
     def alexa_china(self):
         result = []
         i=1
-        while i<=1839:
+        while i<=20:
             if i==1:
-                url = "http://alexa.chinaz.com/all/index.html"
+                url = "http://alexa.chinaz.com/Country/index_CN.html"
             else:
-                url = "http://alexa.chinaz.com/all/index_%d.html"%i
+                url = "http://alexa.chinaz.com/Country/index_CN_%d.html"%i
             s = AlexaChinaSpider(url)
             result+=s.parse_html()
 	    #print i , url , result
@@ -112,30 +113,30 @@ class WhiteSpider:
 	result =s.parse_html()
 	url = "http://www.2345.com/mail.htm"
         s = Bank2345Spider(url)
-        result +=s.parse_html()
+        result+=s.parse_html()
 	url = "http://www.2345.com/gov.htm"
         s = Bank2345Spider(url)
-        result +=s.parse_html()	
+        result+=s.parse_html()	
         url = "http://www.2345.com/corp.htm"
         s = Bank2345Spider(url)
-        result +=s.parse_html()
+        result+=s.parse_html()
 	url = "http://www.2345.com/law.htm"
         s = Bank2345Spider(url)
-        result +=s.parse_html()
+        result+=s.parse_html()
 	url = "http://buy.2345.com/shangjia"
         s = Bank2345Spider(url)
-        result +=s.parse_html()
+        result+=s.parse_html()
 	url = "http://buy.2345.com/haitao"
         s = Bank2345Spider(url)
-        result +=s.parse_html()
+        result+=s.parse_html()
 	url = "http://www.2345.com/love.htm"
         s = Bank2345Spider(url)
-        result +=s.parse_html()
+        result+=s.parse_html()
 	return result	
 		
     def get_all_result(self):
 	result = []
-	#result = self.alexa_global()
-	#result += self.alexa_china()
-	result+=self.bank_2345()
+	result = self.alexa_global()
+	#result+= self.alexa_china()
+	#result+=self.bank_2345()
 	return result
