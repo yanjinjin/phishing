@@ -159,12 +159,12 @@ class verify:
 	        return render.message("isverifier")		
 	print sess.username
 	if sess.username !=None:
-	   if None == m.select_verify_from_user_by_username(sess.username):
-		usernamemd5 = m.get_md5_value(sess.username)
-		print "http://11.11.22.33/verify?code=%s"%(usernamemd5)	
+	   #if None == m.select_verify_from_user_by_username(sess.username):
+		#usernamemd5 = m.get_md5_value(sess.username)
+		#print "http://11.11.22.33/verify?code=%s"%(usernamemd5)	
 		#se = Sendemail()
             	#se.sendemail(i)
-		return render.message("notverifier")
+		#return render.message("notverifier")
 	   result_verifying = m.select_from_result_for_verify(sess.username,verify_type_report)
            return render.verify(result_verifying) 
 	else:
