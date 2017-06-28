@@ -295,7 +295,7 @@ class admin:
                     m.insert_into_result(host, verify_type_host ,m.admin)
         elif btn == "black":
 	    bs = BlackSpider()
-	    result = bs.phishtank()
+	    result = bs.get_all_result()
 	    for i in result:
 	        #print "%s\n////////////"%i
          	m.insert_into_result(i, verify_type_phishing ,m.admin)

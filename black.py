@@ -1,33 +1,36 @@
 from spider import *
 
-class PhishtankBlackSpider(Spider):
-    def parse_html(self):
-        file = "download/%s"%(self.url[self.url.rindex('/')+1:])
-        file = os.path.join(os.path.dirname(__file__),file)
-        print file
-	if self.get_rescode == 200 and self.get_html!=None:
-            file_object = open(file , 'w+')
-            try:
-                file_object.write(self.get_html)
-            finally:
-                file_object.close()
+from spider import *
+import os
 
-	file_object = open(file, 'r')
-	try:
-	    #file_object.write(text)
-	    text = file_object.readlines()
-	    for line in text:
-		column = line.split(',')
-		self.result.append(column[1])	
-	finally:
-            file_object.close()
-	
-	return self.result
+class PhishtankBlackSpider(spider_parse):
+    def __init__(self):
+	file = "download/black/"
+        dir = os.path.join(os.path.dirname(__file__),file)
+	self.real_dir = os.path.join(dir , "data-phishtank-com")
+	s=Spider("http://data.phishtank.com/data/68b4c2263bc5687ad3f275f69de3dbba4ae5219aa88c349125d73a064260f866/online-valid.csv",dir)
+        s.set_white("\.csv")
+	s.run()
+    
+    def parse_data(self):
+	result=[]
+	filelist=[]
+	self.get_all_file(self.real_dir,filelist)
+	for file in filelist:
+	    print file
+	    file_object = open(file, 'r')
+            try:
+                text = file_object.readlines()
+	        for line in text:
+		    column = line.split(',')
+		    result.append(column[1])
+	    finally:
+            	file_object.close()
+	return result 
+
 
 class BlackSpider:
-    def phishtank(self):
-        url = "http://data.phishtank.com/data/68b4c2263bc5687ad3f275f69de3dbba4ae5219aa88c349125d73a064260f866/online-valid.csv"
-        print url
-	s = PhishtankBlackSpider(url)
-        result=s.parse_html()
+    def get_all_result(self):
+        s = PhishtankBlackSpider()
+        result=s.parse_data()
         return result

@@ -9,7 +9,6 @@ see apache_phishing.conf
 #close selinux
 setenforce 0
 
-
 version
 1.0
-base
+base on 2017.6.28
