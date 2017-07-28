@@ -803,7 +803,7 @@ class Spider_one(object):
     
     def get_rescode(self):
 	#200
-	return self.recode
+	return self.rescode
 
     def get_html(self):
 	return self.html

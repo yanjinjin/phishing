@@ -38,16 +38,18 @@ t_globals = {
 }
 render = web.template.render(os.path.join(curdir,'templates'), base='base', globals=t_globals)
 app = web.application(urls, locals())
+
+web.config.session_parameters['cookie_name'] = 'phishfeeds_session_id'
+web.config.session_parameters['cookie_domain'] = None
+web.config.session_parameters['timeout'] = 24 * 60 * 60,  # 24 hours
+web.config.session_parameters['ignore_expiry'] = False
+web.config.session_parameters['ignore_change_ip'] = True
+web.config.session_parameters['secret_key'] = 'fLjUfxqXtfiNoIldA0A0J'
+web.config.session_parameters['expired_message'] = 'session expired'
+
 if web.config.get('_session') is None:
     sess = web.session.Session(app, web.session.DiskStore(os.path.join(curdir,'sessions')), initializer = {'username': None,'verifycode':None})
     web.config._session = sess
-    web.config.session_parameters['cookie_name'] = 'sign_session_id'
-    web.config.session_parameters['cookie_domain'] = None
-    web.config.session_parameters['timeout'] = 24 * 60 * 60,  # 24 hours
-    web.config.session_parameters['ignore_expiry'] = False
-    web.config.session_parameters['ignore_change_ip'] = True
-    web.config.session_parameters['secret_key'] = 'fLjUfxqXtfNoIldA0A0J'
-    web.config.session_parameters['expired_message'] = 'session expired'
 else:
     sess = web.config._session
 
@@ -151,8 +153,7 @@ class report:
 	if username == None:
 	    username = m.admin
 	sp = Spider_one(url)
-	#if 1:
-	if sp.get_rescode == 200 and sp.get_html!=None:	
+	if sp.get_rescode() == 200 or sp.get_html()!=None:	
 	    if False == m.insert_into_result(url, verify_type_report ,username):
 	        print "report insert into result err"
 		return render.message("reporterr")	    

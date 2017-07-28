@@ -6,9 +6,6 @@ $def with (result_verifying)
 						<thead>
 							<tr>
 								<th>
-									编号
-								</th>
-								<th>
 									网站
 								</th>
 								<th>
@@ -20,9 +17,6 @@ $def with (result_verifying)
 						    <form id="myform" method="post" action="verify">
 							$for i in result_verifying
 								<tr>
-									<td>
-										$i[0]
-									</td>
 									<td>
 										<p><a href="$i[1]">
 										$if len(i[1]) > 20:
