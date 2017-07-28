@@ -1,3 +1,6 @@
+copyright 2017 phishfeeds Inc
+email:phishfeeds@yahoo.com
+
 # phishing
 #apache+wsgi+webpy
 yum install apache2

@@ -17,15 +17,14 @@ import pickle
 import StringIO
 import gzip
 import signal
-
+import random
 import gc
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 # for trace memory
-#from guppy import hpy
-#hp = hpy()
+random.seed(0)
 
 #so i can search keyword debug to remove it
 def debug(msg):
@@ -310,8 +309,8 @@ class Downloader:
             try:
                 job = self.store.get()
             except Empty, e:
-                time.sleep(1) 
-                continue
+        	time.sleep(1)
+	        continue
 
             #print job
             if Utility.is_js_label(job.get_link()):
@@ -332,7 +331,6 @@ class Downloader:
                     self.store.task_done()
 
             link = job.get_joined_link()
-	    sleep(3)#good spider
             try:
                 bechmark_start = datetime.now()
                 c, c_t, c_charset = self.get_content(job)
@@ -377,6 +375,8 @@ class Downloader:
                 #continue
             finally:
                 self.store.task_done()
+		time.sleep(5*random.random()+1)#sleep 1~5 good spider
+		safe_print("one task download over")
 
     def __ungzip(self, content):
         cs = StringIO.StringIO(content)
@@ -735,8 +735,6 @@ class Spider:
     def __del__(self):
 	pass
     def on_sigint(self,signum, frame):
-        #after = hp.heap()
-        #print after
         os._exit(signum)
 
 class spider_parse:
@@ -781,8 +779,52 @@ class spider_parse:
             	file_object.close()
 	return result         
 
+class Spider_one(object):
+    def __init__(self,url):
+	print "spider start"
+	self.rescode = 0
+	self.html = None
+	self.result = []
+	self.url = url
+	self.res = None
+	print "start connect...."
+        try:
+            socket.setdefaulttimeout(2)
+            req = urllib2.Request(url)
+	    req.add_header('Referer', 'http://tieba.baidu.com/')
+            req.add_header('User-Agent',"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36")
+	    self.res = urllib2.urlopen(req)
+	    self.rescode = self.res.getcode()
+	    self.html =  self.res.read()
+	except urllib2.URLError, e:
+	    self.html = None
+	    print e.reason
+	    print "connect failed"+url	
+    
+    def get_rescode(self):
+	#200
+	return self.recode
+
+    def get_html(self):
+	return self.html
+
+    def parse_html(self):
+	return self.html
+
+    def __del__(self):
+        print "spider over"
+	if self.res!=None:
+	    self.res.close()
+	    del self.res
+
 if __name__ == '__main__':
-    s=Spider("https://www.cnblogs.com/","download")
+    url = "https://www.cnblogs.com/"
+    print url
+    s = Spider_one(url)
+    result=s.parse_html()
+    print result
+
+    s=Spider(url,"download")
     s.set_white("www\.cnblogs\.com")
     s.set_black('\.xml')
     s.run()

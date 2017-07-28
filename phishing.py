@@ -14,6 +14,7 @@ from black import *
 from similarity import *
 from verifycode import *
 from getdomainbyurl import *
+from phishingbp import *
 
 web.config.debug = False
 
@@ -55,6 +56,8 @@ verify_type_phishing=1
 verify_type_not_phishing=2
 verify_type_report=3
 verify_type_host=4
+
+PBP=Phishingbp()
 
 class index:
     def GET(self):
@@ -116,7 +119,9 @@ class check:
         
         print score_not_phishing,score_phishing,score_unknown
 	if score_not_phishing == 0 and score_phishing ==0 and score_unknown ==0:
-            return render.message("checkerr")
+            score_phishing = PBP.predict(url)
+	    if score_phishing == 0:
+	        return render.message("checkerr")
 	score_all = score_not_phishing+score_phishing
 	if score_all >100:
 	    score_not_phishing = (score_not_phishing*100)/score_all
@@ -145,17 +150,17 @@ class report:
 	username = sess.username
 	if username == None:
 	    username = m.admin
-	sp = Spider(url)
-	if 1:
-	#if sp.get_rescode == 200 and sp.get_html!=None:	
+	sp = Spider_one(url)
+	#if 1:
+	if sp.get_rescode == 200 and sp.get_html!=None:	
 	    if False == m.insert_into_result(url, verify_type_report ,username):
 	        print "report insert into result err"
-		return render.message("reporterr-url")	    
+		return render.message("reporterr")	    
 	    if sess.username == None:
 	 	return render.message("reportnotloginok")
 	    else:
 		return render.message("reportloginok")
-	return render.message("reporterr")
+	return render.message("reporterr-url")
 
 class verify:
     def GET(self):

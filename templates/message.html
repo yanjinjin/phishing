@@ -17,15 +17,15 @@ $def with (message)
 	$elif message=="registerok":
            <p>注册成功，点击<a href="/login">登录</a></p>
 	$elif message=="reporterr":
-           <p>录入失败</p>
+           <p>添加失败</p>
 	$elif message=="reporterr-url":
-           <p>录入失败，网站无法打开，<a href="/report">重新录入</a></p>
+           <p>添加失败，网站无法访问，<a href="/report">重新添加</a></p>
 	$elif message=="reporterr-verify":
-           <p>录入失败，验证码输入错误，<a href="/report">重新录入</a></p>
+           <p>添加失败，验证码输入错误，<a href="/report">重新添加</a></p>
 	$elif message=="reportloginok":
-           <p>录入成功，如果网站已经确认会邮件通知你</p>
+           <p>添加成功，如果网站已经确认会邮件通知你</p>
 	$elif message=="reportnotloginok":
-           <p>录入成功，你可以隔一天时间再来查询结果，隔的时间越长越准确</p>
+           <p>添加成功，系统会员和管理员会审核您添加的网站，请及时关注审核结果</p>
 	$elif message=="findpasswd":
            <p>密码已经找回，已发送到你注册的邮箱中</p>	
 	$elif message=="findpasswderr":
