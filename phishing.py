@@ -41,14 +41,14 @@ app = web.application(urls, locals())
 
 web.config.session_parameters['cookie_name'] = 'phishfeeds_session_id'
 web.config.session_parameters['cookie_domain'] = None
-web.config.session_parameters['timeout'] = 24 * 60 * 60,  # 24 hours
-web.config.session_parameters['ignore_expiry'] = False
+web.config.session_parameters['timeout'] = 86400,  # 24 hours
+web.config.session_parameters['ignore_expiry'] = True
 web.config.session_parameters['ignore_change_ip'] = True
 web.config.session_parameters['secret_key'] = 'fLjUfxqXtfiNoIldA0A0J'
 web.config.session_parameters['expired_message'] = 'session expired'
 
 if web.config.get('_session') is None:
-    sess = web.session.Session(app, web.session.DiskStore(os.path.join(curdir,'sessions')), initializer = {'username': None,'verifycode':None})
+    sess = web.session.Session(app, web.session.DiskStore(os.path.join(curdir,'sessions')), initializer = {'username': None})
     web.config._session = sess
 else:
     sess = web.config._session
@@ -134,16 +134,15 @@ class check:
 class report:
     def GET(self):
 	vc = Verifycode()
-        sess.verifycode = vc.getcode()
-        return render.report()
+        return render.report(vc.getcode())
     def POST(self):
 	search = web.input()
         print search
         url = search.get('url')
 	url = url.strip()
 	verifycode = search.get('verifycode')
-        print verifycode.lower() , sess.verifycode.lower()
-        if verifycode.lower() != sess.verifycode.lower():
+	verifycode_hidden = search.get('verifycode_hidden')
+        if verifycode.lower() != verifycode_hidden.lower():
             print "report verifycode err"
 	    return render.message("reporterr-verify")
 
@@ -211,18 +210,17 @@ class verify:
 class register:
     def GET(self):
 	vc = Verifycode()
-	sess.verifycode = vc.getcode()
-	return render.register()
+	return render.register(vc.getcode())
     def POST(self):
 	search = web.input()
         username = search.get('username')
 	passwd1 = search.get('password1')
 	passwd2 = search.get('password2')
 	verifycode = search.get('verifycode')
+	verifycode_hidden = search.get('verifycode_hidden')
 	if passwd1 != passwd2:
 	    return render.message("registererr-passwd")
-	print verifycode.lower() , sess.verifycode.lower()
-	if verifycode.lower() != sess.verifycode.lower():
+	if verifycode.lower() != verifycode_hidden.lower():
 	    return render.message("registererr-verify")
         m = Model()
 	if m.select_userid_from_user_by_username(username) != None:
@@ -257,14 +255,13 @@ class logout:
 class forgetpasswd:
     def GET(self):
 	vc = Verifycode()
-	sess.verifycode = vc.getcode()
-        return render.forgetpasswd()
+        return render.forgetpasswd(vc.getcode())
     def POST(self):
         search = web.input()
         username = search.get('username')
 	verifycode = search.get('verifycode')
-        print verifycode.lower() , sess.verifycode.lower()
-        if verifycode.lower() != sess.verifycode.lower():
+	verifycode_hidden = search.get('verifycode_hidden')
+        if verifycode.lower() != verifycode_hidden.lower():
             return render.message("findpasswderr")
 	m = Model()
 	if m.select_userid_from_user_by_username(username) == None:
