@@ -108,7 +108,7 @@ class check:
 	    elif i[2] == verify_type_host and host == i[1]:
 		if score_host_tag == 0:
 		    score_host_tag =1
-		    score_not_phishing=75+((len(host)*100)/(len(host)+len(url)))
+		    score_not_phishing=85+((len(host)*100)/(len(host)+len(url)))
 		    score_phishing=0
 		    score_unknown=0
 	    elif i[2] == verify_type_report and url == i[1]:
