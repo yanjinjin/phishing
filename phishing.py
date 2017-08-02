@@ -16,6 +16,7 @@ from similarity import *
 from verifycode import *
 from getdomainbyurl import *
 from phishingbp import *
+from weixin import *
 
 web.config.debug = False
 
@@ -30,7 +31,8 @@ urls = (
     '/logout','logout',
     '/forgetpasswd','forgetpasswd',
     '/admin','admin',
-    '/help','help'
+    '/help','help',
+    '/weixin','weixin'
     )
 
 t_globals = {  
@@ -83,6 +85,20 @@ class index:
 	search = web.input()
         browser = search.get('browser')
 	return render.index(browser)
+
+class weixin:
+    def GET(self):
+        search = web.input()
+	signature=search.get('signature')
+	timestamp=search.get('timestamp')
+        nonce=search.get('nonce')
+	echostr=search.get('echostr')
+	print signature,timestamp,nonce,echostr
+	wh = weixin_handle()
+	re = wh.get(signature,timestamp,nonce,echostr)	
+	return re
+    def POST(self):
+	return "thanks"
 
 class check:
     def GET(self):
