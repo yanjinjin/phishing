@@ -4,6 +4,7 @@ curdir = os.path.dirname(__file__)
 import sys
 sys.path.append(curdir) 
 import os,web
+from web.session import Session
 import math
 import thread
 from time import ctime,sleep
@@ -39,19 +40,35 @@ t_globals = {
 render = web.template.render(os.path.join(curdir,'templates'), base='base', globals=t_globals)
 app = web.application(urls, locals())
 
+class MySessionExpired(web.HTTPError):  
+    def __init__(self, headers,message):  
+        web.HTTPError.__init__(self, '200 OK', headers, data=message)  
+   
+class MySession(Session):  
+    def __init__(self, app, store, initializer=None):  
+        Session.__init__(self,app,store,initializer)  
+   
+    def expired(self):  
+        self._killed = True  
+        self._save()  
+        message = self._config.expired_message  
+        headers = {'Content-Type': 'text/html','Refresh':'2;url="/index"'}  
+        raise MySessionExpired(headers, message)  
+
 web.config.session_parameters['cookie_name'] = 'phishfeeds_session_id'
+web.config.session_parameters['cookie_path'] = '/'
 web.config.session_parameters['cookie_domain'] = None
-web.config.session_parameters['timeout'] = 86400,  # 24 hours
-web.config.session_parameters['ignore_expiry'] = True
+web.config.session_parameters['timeout'] = 86400  # 24 hours
+web.config.session_parameters['ignore_expiry'] = False
 web.config.session_parameters['ignore_change_ip'] = True
 web.config.session_parameters['secret_key'] = 'fLjUfxqXtfiNoIldA0A0J'
 web.config.session_parameters['expired_message'] = 'session expired'
-
 if web.config.get('_session') is None:
-    sess = web.session.Session(app, web.session.DiskStore(os.path.join(curdir,'sessions')), initializer = {'username': None})
+    sess = MySession(app, web.session.DiskStore(os.path.join(curdir,'sessions')), initializer = {'username': None})
     web.config._session = sess
 else:
     sess = web.config._session
+    print sess
 
 verify_type_unknown=0
 verify_type_phishing=1
@@ -63,7 +80,9 @@ PBP=Phishingbp()
 
 class index:
     def GET(self):
-	return render.index()
+	search = web.input()
+        browser = search.get('browser')
+	return render.index(browser)
 
 class check:
     def GET(self):
