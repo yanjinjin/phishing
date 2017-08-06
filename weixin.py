@@ -5,6 +5,7 @@ import urllib2
 import json
 import hashlib
 import time
+import xml.etree.ElementTree as ET
 
 WEIXIN_TOKEN = '123321'
 WEIXIN_APPID = 'wx26942ed464cbb444'
@@ -19,7 +20,26 @@ class weixin_handle:
         weixin_access_token = json.loads(result).get('access_token')
         print 'access_token===%s' % weixin_access_token
  	return weixin_access_token
-    
+   
+    def message(self , body):
+	print body
+	data = ET.fromstring(body)
+        tousername = data.find('ToUserName').text
+        fromusername = data.find('FromUserName').text
+        createtime = data.find('CreateTime').text
+        msgtype = data.find('MsgType').text
+	content = "本公众号可查询钓鱼，诈骗等恶意网站，如果您遇到可疑网站，可访问如下网站进行查询!\n\nhttp://phishfeeds.com\n"
+	textTpl = """<xml>
+            <ToUserName><![CDATA[%s]]></ToUserName>
+            <FromUserName><![CDATA[%s]]></FromUserName>
+            <CreateTime>%s</CreateTime>
+            <MsgType><![CDATA[text]]></MsgType>
+	    <Content><![CDATA[%s]]></Content>
+            <MsgId>1234567890123456</MsgId>
+	    </xml>"""
+        out = textTpl % (fromusername, tousername, str(int(time.time())),  content)
+        return out 
+ 
     def get(self,signature,timeStamp,nonce,echostr):
 	if timeStamp == None or nonce == None:
 	   return None
@@ -33,3 +53,6 @@ class weixin_handle:
             return echostr
 	else:
 	    return None
+    
+    def post(self,body):
+	return self.message(body)

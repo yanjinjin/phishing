@@ -64,7 +64,7 @@ web.config.session_parameters['timeout'] = 86400  # 24 hours
 web.config.session_parameters['ignore_expiry'] = False
 web.config.session_parameters['ignore_change_ip'] = True
 web.config.session_parameters['secret_key'] = 'fLjUfxqXtfiNoIldA0A0J'
-web.config.session_parameters['expired_message'] = 'session expired'
+web.config.session_parameters['expired_message'] = ''
 if web.config.get('_session') is None:
     sess = MySession(app, web.session.DiskStore(os.path.join(curdir,'sessions')), initializer = {'username': None})
     web.config._session = sess
@@ -97,8 +97,13 @@ class weixin:
 	wh = weixin_handle()
 	re = wh.get(signature,timestamp,nonce,echostr)	
 	return re
+    
     def POST(self):
-	return "thanks"
+        body = web.data()
+	print body
+	wh = weixin_handle()
+	re = wh.post(body)
+	return re
 
 class check:
     def GET(self):
