@@ -17,6 +17,7 @@ from verifycode import *
 from getdomainbyurl import *
 from phishingbp import *
 from weixin import *
+from plog import *
 
 web.config.debug = False
 
@@ -100,7 +101,7 @@ class weixin:
     
     def POST(self):
         body = web.data()
-	print body
+	plog(body)
 	wh = weixin_handle()
 	re = wh.post(body)
 	return re
@@ -113,6 +114,7 @@ class check:
 	url = search.get('url')
 	if url == "" or url ==None:
 	    return render.message("checkerr") 
+	plog(url)
 	url = url.strip()
 	d = SLD()
 	host = d.get_second_level_domain(url)
