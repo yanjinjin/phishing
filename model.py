@@ -20,7 +20,7 @@ class Model:
 	    sql = "create table %s(id integer primary key,username text,passwd text, verifier int,date text,domain1 text,domain2 text) "%(self.table_user)
             self.conn.execute(""+sql+"")
             print 'create db %s'%(self.table_user)
-	    sql = "insert into %s (username,passwd,verifier,date) values ('%s', '%s', %d,'%s')"%(self.table_user, self.admin, "ymj!yzc@20131225", 1, datetime.datetime.now())
+	    sql = "insert into %s (username,passwd,verifier,date) values ('%s', '%s', %d,'%s')"%(self.table_user, self.admin, "111111", 1, datetime.datetime.now())
             print sql
 	    self.conn.execute(""+sql+"")
             self.conn.commit()
