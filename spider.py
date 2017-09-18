@@ -800,7 +800,8 @@ class Spider_one(object):
 	    self.html = None
 	    print e.reason
 	    print "connect failed"+url	
-    
+   	    pass
+ 
     def get_rescode(self):
 	#200
 	return self.rescode
