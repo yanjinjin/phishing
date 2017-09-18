@@ -164,8 +164,8 @@ class check:
         print score_not_phishing,score_phishing,score_unknown
 	if score_not_phishing == 0 and score_phishing ==0 and score_unknown ==0:
             score_phishing = PBP.predict(url)
-	    if score_phishing == 0:
-	        return render.message("checkerr")
+	    #if score_phishing == 0:
+	        #return render.message("checkerr")
 	score_all = score_not_phishing+score_phishing
 	if score_all >100:
 	    score_not_phishing = (score_not_phishing*100)/score_all

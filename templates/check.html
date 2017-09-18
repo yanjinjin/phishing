@@ -20,6 +20,8 @@ $def with (score_not_phishing , score_phishing , score_unknown)
             $score_unknown%
             </div>
         </div>
+	$if score_unknown == 100:
+		<p>查询不到结果，您可以使用<a href="/report">添加一个网站</a>功能，将网址添加到系统，管理员和系统会员会帮您审核，请您及时关注审核结果。</p>
     </div>
 </div>
 
