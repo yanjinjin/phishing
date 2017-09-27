@@ -319,6 +319,8 @@ class help:
         return render.help(result)
 class admin:
     def GET(self):
+	if sess.username == None or sess.username != "admin@admin":
+            raise web.seeother("/index")
 	m = Model()
 	user = m.select_from_user_for_admin()
 	result = m.select_from_result_for_admin()
@@ -336,6 +338,8 @@ class admin:
         count.append(result_count_verify_type_host)
         return render.admin(user , result , verify ,count)
     def POST(self):
+	if sess.username == None or sess.username != "admin@admin":
+            raise web.seeother("/index")
         search = web.input()
         btn = search.get('btn')
         m = Model()
