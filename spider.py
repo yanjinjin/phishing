@@ -391,7 +391,11 @@ class Downloader:
         headers = {"Accept":"text/html","Referer":"http://www.sijitao.net/","User-Agent": "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36"}
 
         request = Request(url, None, headers)
-
+	if self.store.proxys!='' and self.store.proxys!=None:
+	    print ">>>>>" + self.store.proxys
+	    proxy_handler=urllib2.ProxyHandler({self.store.proxys})
+	    opener=urllib2.build_opener(proxy_handler)
+	    urllib2.install_opener(opener)
         fh = urllib2.urlopen(request, timeout = 60 * 2)
         content = fh.read()
 
@@ -549,8 +553,9 @@ class Store(Queue):
     '''
     a wrapper class to Queue.Queue, so we can control the get and put process
     '''
-    def __init__(self, store_path):
+    def __init__(self, proxys , store_path):
         Queue.__init__(self)
+	self.proxys = proxys
         self.store_path = store_path
         self.whitelist = WhiteList()
         self.blacklist = BlackList()
@@ -699,13 +704,14 @@ class DHManager:
         safe_print("done")
 
 class Spider:
-    def __init__(self, url , download_path):
+    def __init__(self, url ,proxys, download_path):
         #signal.signal(signal.SIGINT, self.on_sigint)
 	self.url = url
 	self.start_time = datetime.now()
+	self.proxys = proxys
         self.download_path = download_path
         try:
-            self.store = Store(self.download_path)
+            self.store = Store(self.proxys , self.download_path)
         except StoreError, e:
             safe_print(e)
             sys.exit(1)

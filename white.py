@@ -1,4 +1,5 @@
 from spider import *
+from spider_proxy import *
 import os
 
 class AlexaGlobalSpider(spider_parse):
@@ -6,7 +7,8 @@ class AlexaGlobalSpider(spider_parse):
 	file = "download/white/"
         dir = os.path.join(os.path.dirname(__file__),file)
 	self.real_dir = os.path.join(dir , "alexa-chinaz-com")
-	s=Spider("http://alexa.chinaz.com/Global/index.html",dir)
+	proxys = getProxys()
+	s=Spider("http://alexa.chinaz.com/Global/index.html",proxys,dir)
         s.set_white("alexa\.chinaz\.com/Global/index")
         s.set_white("alexa\.chinaz\.com/Language/index")
         s.set_white("alexa\.chinaz\.com/Country/index")
