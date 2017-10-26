@@ -24,7 +24,9 @@ class Phishingbp(Spider_one):
 
     def get_html(self,url):
 	s = Spider_one(url)
-        result=s.parse_html()
+        if s == None:
+	    return None
+	result=s.parse_html()
         return result
 
     def parse_html(self,url):
@@ -34,7 +36,7 @@ class Phishingbp(Spider_one):
 	if url[0:8] == 'https://':
 	    result[0] = 1
         c = self.get_html(url)
-	if c==None:
+	if c==None or c == []:
 	    return result
 	c=c.lower()
         if c.find("icp")!=-1 or c.find("备")!=-1:

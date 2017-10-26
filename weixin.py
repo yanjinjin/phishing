@@ -22,7 +22,6 @@ class weixin_handle:
  	return weixin_access_token
    
     def message(self , body):
-	print body
 	data = ET.fromstring(body)
         tousername = data.find('ToUserName').text
         fromusername = data.find('FromUserName').text

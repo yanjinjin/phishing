@@ -2,6 +2,7 @@
 from Queue import Queue, Empty
 import urllib2
 from urllib2 import *
+import requests
 import threading
 from threading import Thread
 import re
@@ -375,7 +376,7 @@ class Downloader:
                 #continue
             finally:
                 self.store.task_done()
-		time.sleep(5*random.random()+1)#sleep 1~5 good spider
+		time.sleep(2*random.random()+1)#sleep 1~2 good spider
 		safe_print("one task download over")
 
     def __ungzip(self, content):
@@ -391,14 +392,26 @@ class Downloader:
         headers = {"Accept":"text/html","Referer":"http://www.sijitao.net/","User-Agent": "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36"}
 
         request = Request(url, None, headers)
-	if self.store.proxys!='' and self.store.proxys!=None:
-	    print ">>>>>" + self.store.proxys
-	    proxy_handler=urllib2.ProxyHandler({self.store.proxys})
-	    opener=urllib2.build_opener(proxy_handler)
-	    urllib2.install_opener(opener)
-        fh = urllib2.urlopen(request, timeout = 60 * 2)
+	fh = None
+	if self.store.proxys!=[] and self.store.proxys!=None:
+	    for i in self.store.proxys:
+		try:
+		    #p = random.choice(range(0, len(self.store.proxys)))
+                    dict = {}
+                    dict['http'] = i
+                    print dict
+                    #dict['http']="110.16.80.106:8080"
+                    proxy_handler=urllib2.ProxyHandler(dict)
+                    opener=urllib2.build_opener(proxy_handler)
+                    urllib2.install_opener(opener)
+                    fh = urllib2.urlopen(request, timeout = 20)
+		    break
+	        except:		
+		    continue
+        else:
+	    fh = urllib2.urlopen(request, timeout = 60 * 2)
         content = fh.read()
-
+	#content = requests.get(url,headers = headers,proxies = dict,timeout = 30)
         ct = fh.headers['Content-Type']
         match = re.match(r'(.*);', ct)
 
